@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notion Calendar</title>
+
+<style>
+/* HARD RESET — removes Notion iframe background */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+}
+
+/* Center widget */
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  background: #ffffff;
+}
+
+/* Card */
+.calendar {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px 20px;
+  width: 280px;
+  box-shadow: none;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f4efe9;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+}
+
+/* Weekdays */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 16px;
+  font-size: 12px;
+  text-align: center;
+  color: #444;
+}
+
+/* Days */
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 10px;
+  gap: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Day cell */
+.day {
+  padding: 8px 0;
+  border-radius: 8px;
+}
+
+/* Today highlight */
+.today {
+  background: #f4efe9;
+  font-weight: 600;
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+  <div class="calendar">
+    <div class="header">
+      <span>‹</span>
+      <span id="monthYear"></span>
+      <span>›</span>
+    </div>
+
+    <div class="weekdays">
+      <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+    </div>
+
+    <div class="days" id="days"></div>
+  </div>
+</div>
+
+<script>
+const now = new Date();
+const year = now.getFullYear();
+const month = now.getMonth();
+const today = now.getDate();
+
+const monthYear = document.getElementById("monthYear");
+const daysEl = document.getElementById("days");
+
+monthYear.textContent = now.toLocaleString("default", { month: "long", year: "numeric" });
+
+const firstDay = new Date(year, month, 1).getDay() || 7;
+const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+// Empty cells before month starts
+for (let i = 1; i < firstDay; i++) {
+  daysEl.innerHTML += `<div></div>`;
+}
+
+// Days
+for (let d = 1; d <= daysInMonth; d++) {
+  const cls = d === today ? "day today" : "day";
+  daysEl.innerHTML += `<div class="${cls}">${d}</div>`;
+}
+</script>
+</body>
+</html>
