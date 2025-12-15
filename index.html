@@ -6,7 +6,6 @@
 <title>Notion Calendar</title>
 
 <style>
-/* HARD RESET — removes Notion iframe background */
 html, body {
   margin: 0;
   padding: 0;
@@ -14,32 +13,30 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
 }
 
-/* Center widget */
+/* EXACT Notion block fit */
 .wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
+  width: 260px;
+  margin: 0;
+  padding: 0;
   background: #ffffff;
 }
 
 /* Card */
 .calendar {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 18px 20px 20px;
-  width: 280px;
-  box-shadow: none;
+  border-radius: 14px;
+  padding: 14px;
 }
 
 /* Header */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   background: #f4efe9;
-  border-radius: 12px;
-  padding: 10px 14px;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
@@ -47,8 +44,8 @@ html, body {
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-top: 16px;
-  font-size: 12px;
+  margin-top: 12px;
+  font-size: 11px;
   text-align: center;
   color: #444;
 }
@@ -57,19 +54,19 @@ html, body {
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-top: 10px;
+  margin-top: 8px;
   gap: 6px;
+  font-size: 13px;
   text-align: center;
-  font-size: 14px;
 }
 
 /* Day cell */
 .day {
-  padding: 8px 0;
-  border-radius: 8px;
+  padding: 6px 0;
+  border-radius: 6px;
 }
 
-/* Today highlight */
+/* Today */
 .today {
   background: #f4efe9;
   font-weight: 600;
@@ -100,23 +97,19 @@ const year = now.getFullYear();
 const month = now.getMonth();
 const today = now.getDate();
 
-const monthYear = document.getElementById("monthYear");
+document.getElementById("monthYear").textContent =
+  now.toLocaleString("default", { month: "long", year: "numeric" });
+
 const daysEl = document.getElementById("days");
-
-monthYear.textContent = now.toLocaleString("default", { month: "long", year: "numeric" });
-
 const firstDay = new Date(year, month, 1).getDay() || 7;
 const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-// Empty cells before month starts
 for (let i = 1; i < firstDay; i++) {
   daysEl.innerHTML += `<div></div>`;
 }
 
-// Days
 for (let d = 1; d <= daysInMonth; d++) {
-  const cls = d === today ? "day today" : "day";
-  daysEl.innerHTML += `<div class="${cls}">${d}</div>`;
+  daysEl.innerHTML += `<div class="day ${d === today ? "today" : ""}">${d}</div>`;
 }
 </script>
 </body>
