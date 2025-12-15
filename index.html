@@ -6,6 +6,7 @@
 <title>Neutral Calendar</title>
 
 <style>
+  /* HARD RESET — prevents Notion blending */
   html {
     background: #ffffff !important;
   }
@@ -20,6 +21,7 @@
     align-items: flex-start;
   }
 
+  /* Calendar wrapper */
   .calendar {
     width: 360px;
     background: #ffffff;
@@ -29,6 +31,7 @@
     box-sizing: border-box;
   }
 
+  /* Header */
   .header {
     display: flex;
     align-items: center;
@@ -54,6 +57,7 @@
     color: #1f1f1f;
   }
 
+  /* Weekdays */
   .weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -67,6 +71,7 @@
     color: #333;
   }
 
+  /* Days grid */
   .days {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
@@ -78,16 +83,21 @@
     font-size: 15px;
     padding: 8px 0;
     border-radius: 10px;
+  }
+
+  /* Current month days */
+  .current {
     color: #111;
+  }
+
+  /* Previous / next month days */
+  .muted {
+    color: #c9c6c2;
   }
 
   .today {
     background: #efebe7;
     font-weight: 700;
-  }
-
-  .muted {
-    color: #c9c6c2;
   }
 </style>
 </head>
@@ -129,7 +139,7 @@
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const prevMonthDays = new Date(year, month, 0).getDate();
 
-    // Previous month (muted)
+    /* Previous month */
     for (let i = startDay; i > 0; i--) {
       const d = document.createElement("div");
       d.className = "muted";
@@ -137,10 +147,11 @@
       daysContainer.appendChild(d);
     }
 
-    // Current month
+    /* Current month */
     for (let i = 1; i <= daysInMonth; i++) {
       const d = document.createElement("div");
       d.textContent = i;
+      d.classList.add("current");
 
       const today = new Date();
       if (
@@ -154,9 +165,9 @@
       daysContainer.appendChild(d);
     }
 
-    // Next month (muted) ⬅️ THIS IS THE NEW PART
-    const totalCells = daysContainer.children.length;
-    const remaining = 42 - totalCells; // 6 full weeks
+    /* Next month */
+    const totalCells = startDay + daysInMonth;
+    const remaining = 7 * Math.ceil(totalCells / 7) - totalCells;
 
     for (let i = 1; i <= remaining; i++) {
       const d = document.createElement("div");
