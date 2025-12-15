@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Neutral Calendar</title>
 
 <style>
@@ -15,75 +15,81 @@
   body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
 
-  /* Calendar container */
+  /* Calendar wrapper */
   .calendar {
-    width: 340px;
+    width: 360px;
     background: #ffffff;
-    padding: 22px 18px;
-    border-radius: 18px;
-    border: 1px solid rgba(0,0,0,0.08);
+    padding: 18px 16px 20px;
+    border-radius: 16px;
+    border: 1px solid #e5e1dc;
     box-sizing: border-box;
   }
 
   /* Header */
   .header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    background: #f2eee8;            /* ← warm neutral (restored) */
-    padding: 12px 14px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    font-weight: 600;
+    justify-content: space-between;
+    background: #efebe7; /* ✅ YOUR EXACT COLOR */
+    padding: 10px 14px;
+    border-radius: 14px;
+    margin-bottom: 14px;
   }
 
   .header button {
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
-    color: #222;
+    color: #1f1f1f;
+    padding: 4px 6px;
   }
 
   .month-year {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 600;
+    color: #1f1f1f;
   }
 
-  /* Grid */
-  .weekdays, .days {
+  /* Weekdays */
+  .weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
-  }
-
-  .weekdays {
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
 
   .weekdays div {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    color: #444;
+    color: #333;
+  }
+
+  /* Days grid */
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 6px;
+    text-align: center;
   }
 
   .days div {
-    padding: 10px 0;
     font-size: 15px;
+    padding: 8px 0;
     border-radius: 10px;
+    color: #111;
   }
 
-  /* Today highlight */
   .today {
-    background: #f2eee8;            /* ← same neutral as header */
+    background: #efebe7; /* ✅ SAME NEUTRAL */
     font-weight: 700;
   }
 
   .muted {
-    color: #c9c9c9;
+    color: #c9c6c2;
   }
 </style>
 </head>
