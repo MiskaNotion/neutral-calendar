@@ -1,99 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Minimal Notion Calendar</title>
+<meta charset="UTF-8">
+<title>Neutral Calendar</title>
 
 <style>
-html, body {
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
-}
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
 
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-/* MAIN CONTAINER */
-.calendar-wrapper {
-  width: 420px;              /* BIGGER size */
-  background: #ffffff;
-  border: 1px solid #e6e3df; /* thin neutral outline */
-  border-radius: 18px;
-  padding: 18px 18px 22px;
-  box-sizing: border-box;
-}
+  /* Calendar container */
+  .calendar {
+    width: 340px;
+    background: #ffffff;
+    padding: 22px 18px;              /* ← original roomy padding */
+    border-radius: 18px;
+    border: 1px solid rgba(0,0,0,0.08); /* ← thin neutral outline */
+    box-sizing: border-box;
+  }
 
-/* HEADER */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #f3f0ec;
-  border-radius: 14px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
-}
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.04);
+    padding: 12px 14px;              /* ← matches original spacing */
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
 
-.header button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #222;
-}
+  .header button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #333;
+  }
 
-.month-year {
-  font-size: 15px;   /* smaller + elegant */
-  font-weight: 600;
-}
+  .month-year {
+    font-size: 14px;                 /* ← slightly smaller like native */
+    font-weight: 600;
+  }
 
-/* WEEKDAYS */
-.weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-  font-size: 13px;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 6px;
-}
+  .weekdays, .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+  }
 
-/* DAYS GRID */
-.days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-}
+  .weekdays {
+    margin-bottom: 10px;
+  }
 
-.days div {
-  padding: 10px 0;
-  font-size: 15px;
-  border-radius: 10px;
-}
+  .weekdays div {
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+  }
 
-.today {
-  background: #f1ede8;
-  font-weight: 700;
-}
+  .days div {
+    padding: 10px 0;                 /* ← restores vertical air */
+    font-size: 15px;
+    border-radius: 10px;
+  }
 
-.muted {
-  color: #c8c5c1;
-}
+  .today {
+    background: rgba(0,0,0,0.06);
+    font-weight: 700;
+  }
+
+  .muted {
+    color: #c9c9c9;
+  }
 </style>
 </head>
 
 <body>
 
-<div class="calendar-wrapper">
+<div class="calendar">
   <div class="header">
-    <button id="prev">‹</button>
+    <button onclick="changeMonth(-1)">‹</button>
     <div class="month-year" id="monthYear"></div>
-    <button id="next">›</button>
+    <button onclick="changeMonth(1)">›</button>
   </div>
 
   <div class="weekdays">
@@ -104,65 +102,56 @@ body {
 </div>
 
 <script>
-let currentDate = new Date();
+  let currentDate = new Date();
 
-const monthYear = document.getElementById("monthYear");
-const daysContainer = document.getElementById("days");
+  function renderCalendar() {
+    const monthYear = document.getElementById("monthYear");
+    const daysContainer = document.getElementById("days");
+    daysContainer.innerHTML = "";
 
-function renderCalendar() {
-  daysContainer.innerHTML = "";
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+    monthYear.textContent = currentDate.toLocaleDateString("en-US", {
+      month: "long",
+      year: "numeric"
+    });
 
-  monthYear.textContent = currentDate.toLocaleDateString("en-US", {
-    month: "long",
-    year: "numeric"
-  });
+    const firstDay = new Date(year, month, 1).getDay();
+    const startDay = firstDay === 0 ? 6 : firstDay - 1;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const prevMonthDays = new Date(year, month, 0).getDate();
 
-  const firstDay = new Date(year, month, 1).getDay();
-  const startDay = firstDay === 0 ? 6 : firstDay - 1;
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const prevMonthDays = new Date(year, month, 0).getDate();
-
-  // previous month filler
-  for (let i = startDay; i > 0; i--) {
-    const d = document.createElement("div");
-    d.className = "muted";
-    d.textContent = prevMonthDays - i + 1;
-    daysContainer.appendChild(d);
-  }
-
-  // current month
-  const today = new Date();
-  for (let i = 1; i <= daysInMonth; i++) {
-    const d = document.createElement("div");
-    d.textContent = i;
-
-    if (
-      i === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear()
-    ) {
-      d.classList.add("today");
+    for (let i = startDay; i > 0; i--) {
+      const d = document.createElement("div");
+      d.className = "muted";
+      d.textContent = prevMonthDays - i + 1;
+      daysContainer.appendChild(d);
     }
 
-    daysContainer.appendChild(d);
+    for (let i = 1; i <= daysInMonth; i++) {
+      const d = document.createElement("div");
+      d.textContent = i;
+
+      const today = new Date();
+      if (
+        i === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear()
+      ) {
+        d.classList.add("today");
+      }
+
+      daysContainer.appendChild(d);
+    }
   }
-}
 
-document.getElementById("prev").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() - 1);
+  function changeMonth(direction) {
+    currentDate.setMonth(currentDate.getMonth() + direction);
+    renderCalendar();
+  }
+
   renderCalendar();
-};
-
-document.getElementById("next").onclick = () => {
-  currentDate.setMonth(currentDate.getMonth() + 1);
-  renderCalendar();
-};
-
-renderCalendar();
 </script>
 
 </body>
