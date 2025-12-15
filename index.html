@@ -13,23 +13,19 @@ html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
 }
 
-/* Notion-safe fixed width */
 .wrapper {
   width: 260px;
   margin: 0 auto;
-  padding: 0;
   background: #ffffff;
 }
 
-/* Calendar card */
 .calendar {
   background: #ffffff;
   border-radius: 14px;
   padding: 12px;
-  border: 1px solid #e9e6e2; /* thin neutral outline */
+  border: 1px solid #e9e6e2;
 }
 
-/* Header */
 .header {
   display: flex;
   align-items: center;
@@ -37,11 +33,15 @@ html, body {
   background: #f4efe9;
   border-radius: 10px;
   padding: 6px 10px;
-  font-size: 13px;           /* smaller month text */
+  font-size: 13px;
   font-weight: 600;
 }
 
-/* Weekdays */
+.header span {
+  cursor: pointer;
+  user-select: none;
+}
+
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -51,7 +51,6 @@ html, body {
   color: #555;
 }
 
-/* Days grid */
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -61,13 +60,11 @@ html, body {
   text-align: center;
 }
 
-/* Day cell */
 .day {
   padding: 6px 0;
   border-radius: 6px;
 }
 
-/* Today highlight */
 .today {
   background: #f4efe9;
   font-weight: 600;
@@ -79,9 +76,9 @@ html, body {
 <div class="wrapper">
   <div class="calendar">
     <div class="header">
-      <span>‹</span>
+      <span id="prev">‹</span>
       <span id="monthYear"></span>
-      <span>›</span>
+      <span id="next">›</span>
     </div>
 
     <div class="weekdays">
@@ -93,25 +90,55 @@ html, body {
 </div>
 
 <script>
-const now = new Date();
-const year = now.getFullYear();
-const month = now.getMonth();
-const today = now.getDate();
+let currentDate = new Date();
 
-document.getElementById("monthYear").textContent =
-  now.toLocaleString("default", { month: "long", year: "numeric" });
-
+const monthYearEl = document.getElementById("monthYear");
 const daysEl = document.getElementById("days");
-const firstDay = new Date(year, month, 1).getDay() || 7;
-const daysInMonth = new Date(year, month + 1, 0).getDate();
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
 
-for (let i = 1; i < firstDay; i++) {
-  daysEl.innerHTML += `<div></div>`;
+function renderCalendar() {
+  daysEl.innerHTML = "";
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const today = new Date();
+
+  monthYearEl.textContent = currentDate.toLocaleString("default", {
+    month: "long",
+    year: "numeric"
+  });
+
+  const firstDay = new Date(year, month, 1).getDay() || 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let i = 1; i < firstDay; i++) {
+    daysEl.innerHTML += `<div></div>`;
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday =
+      d === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear();
+
+    daysEl.innerHTML += `
+      <div class="day ${isToday ? "today" : ""}">${d}</div>
+    `;
+  }
 }
 
-for (let d = 1; d <= daysInMonth; d++) {
-  daysEl.innerHTML += `<div class="day ${d === today ? "today" : ""}">${d}</div>`;
-}
+prevBtn.onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar();
+};
+
+nextBtn.onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar();
+};
+
+renderCalendar();
 </script>
 </body>
 </html>
