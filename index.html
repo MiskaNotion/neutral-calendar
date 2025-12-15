@@ -37,9 +37,13 @@ html, body {
   font-weight: 600;
 }
 
-.header span {
+/* REAL clickable buttons */
+.nav {
+  all: unset;
   cursor: pointer;
-  user-select: none;
+  font-size: 16px;
+  padding: 4px 6px;
+  line-height: 1;
 }
 
 .weekdays {
@@ -76,9 +80,9 @@ html, body {
 <div class="wrapper">
   <div class="calendar">
     <div class="header">
-      <span id="prev">‹</span>
+      <button class="nav" id="prev">‹</button>
       <span id="monthYear"></span>
-      <span id="next">›</span>
+      <button class="nav" id="next">›</button>
     </div>
 
     <div class="weekdays">
@@ -113,7 +117,7 @@ function renderCalendar() {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   for (let i = 1; i < firstDay; i++) {
-    daysEl.innerHTML += `<div></div>`;
+    daysEl.innerHTML += "<div></div>";
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
@@ -128,15 +132,15 @@ function renderCalendar() {
   }
 }
 
-prevBtn.onclick = () => {
+prevBtn.addEventListener("click", () => {
   currentDate.setMonth(currentDate.getMonth() - 1);
   renderCalendar();
-};
+});
 
-nextBtn.onclick = () => {
+nextBtn.addEventListener("click", () => {
   currentDate.setMonth(currentDate.getMonth() + 1);
   renderCalendar();
-};
+});
 
 renderCalendar();
 </script>
