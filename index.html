@@ -2,17 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Neutral Calendar</title>
 
 <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  /* HARD RESET — prevents Notion blending */
+  html {
+    background: #ffffff !important;
   }
 
   body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff !important;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -33,7 +36,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #efebe7; /* ✅ YOUR EXACT COLOR */
+    background: #efebe7; /* EXACT neutral */
     padding: 10px 14px;
     border-radius: 14px;
     margin-bottom: 14px;
@@ -84,7 +87,7 @@
   }
 
   .today {
-    background: #efebe7; /* ✅ SAME NEUTRAL */
+    background: #efebe7; /* SAME neutral */
     font-weight: 700;
   }
 
